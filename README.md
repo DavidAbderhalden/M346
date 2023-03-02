@@ -9,27 +9,26 @@ The data is inside the specific competence folder itself.<br>
 
 ```
 M346
+├──.gitignore
 ├──competences
-│    └──KN01
+│    ├──KN01
+│    │    ├──images
+│    │    ├──KN01_doc.md
+│    │    └──task
+│    │        └──KN01.pdf
+│    └──KN02
+│        ├──files
+│        │    ├──cloud-init-db.yaml
+│        │    └──cloud-init-web.yaml
 │        ├──images
-│        │    ├──instance_apache.PNG
-│        │    ├──instance_db.PNG
-│        │    ├──instance_php.PNG
-│        │    ├──multipass_alter_cpu_count.PNG
-│        │    ├──multipass_delete_purge.PNG
-│        │    ├──multipass_file_one_instance.PNG
-│        │    ├──multipass_file_two_instances.PNG
-│        │    ├──multipass_find.PNG
-│        │    ├──multipass_graphical_list.png
-│        │    ├──multipass_launch_ubuntu_inprogress.PNG
-│        │    ├──multipass_list.PNG
-│        │    ├──multipass_shell.PNG
-│        │    ├──multipass_start_stop.PNG
-│        │    └──multipass_version.PNG
-│        ├──KN01_doc.md
+│        ├──KN02_doc.md
 │        └──task
-│            └──KN01.pdf
-└──README.md
+│            ├──cloud-init-web.yaml
+│            └──KN02.pdf
+├──README.md
+└──utils
+    ├──filetree.bat
+    └──out.txt
 ```
 ## Author
 This Git repository belongs to [David Abderhalden](https://www.david-abderhalden.ch/).
