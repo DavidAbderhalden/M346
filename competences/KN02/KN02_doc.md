@@ -1,6 +1,8 @@
 # KN02
 [Task Description](/task/KN02.pdf)
 
+Note: During the documentation ip addresses of my instances my change (due to restarts...) I will always describe what instance I talk about though.
+
 ## Steps
 ---
 
@@ -65,15 +67,15 @@ First up I will start the apache server with the two php sites. I create a new y
 
 ```yaml
 users:
-  - name: admin
+  - name: ubuntu
     sudo: ALL=(ALL) NOPASSWD:ALL
     groups: users, admin
-    home: /home/admin
+    home: /home/ubuntu
     shell: /bin/bash
     lock_passwd: false
-    plain_text_passwd: 'password'   
+    plain_text_passwd: 'password'        
 ssh_pwauth: true
-disable_root: false
+disable_root: false 
 packages:
   - apache2 
   - curl 
@@ -81,6 +83,7 @@ packages:
   - php 
   - libapache2-mod-php 
   - php-mysqli
+  - adminer
 
 write_files:
   - path: /var/www/html/info.php
@@ -118,7 +121,7 @@ write_files:
     permissions: '0644'
 ```
 
-To add the packet `adminer` I will need to execute a command. I can do that in the cloud init file via `runcmd`, which only runs during the first boot.
+To add the packet `adminer` I will need to add it to packages and execute a command. I can do that in the cloud init file via `runcmd`, which only runs during the first boot.
 
 ```yaml
 runcmd:
@@ -146,30 +149,73 @@ The configuration is as follows:
 
 ```yaml
 users:
-  - name: admin
+  - name: ubuntu
     sudo: ALL=(ALL) NOPASSWD:ALL
     groups: users, admin
-    home: /home/admin
+    home: /home/ubuntu
     shell: /bin/bash
     lock_passwd: false
-    plain_text_passwd: 'password'   
+    plain_text_passwd: 'password'        
 ssh_pwauth: true
-disable_root: false
+disable_root: false 
 packages:
   - mariadb-server
-  - php-mysqli
 runcmd:
   - sudo mysql -sfu root -e "GRANT ALL ON *.* TO 'admin'@'%' IDENTIFIED BY 'password' WITH GRANT OPTION;"
 ```
 
+In order to be able to connect to the database with an external machine we need to add the following command in the `runcmd`:
+
+```yaml
+sudo sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mysql/mariadb.conf.d/50-server.cnf
+sudo systemctl restart mariadb.service
+```
+
 ![multipass_web_db_list_1.png](./images/multipass_web_db_list_1.png)
 
-After launching this instance too I can now try to reach the `172.23.29.213/db.php` endpoint on my web server. 
+To make sure that the database is working I will use the `shell` command and open a shell of my db instance. There I can call the database shell with following command:
 
-![multipass_db_error.png](./images/multipass_db_error.png)
+```ps
+mysql -u admin -p
+```
 
-**Explaination:** As expected I am prompted with an error page. This is because earler when we created the db.php file (in the cloud-init configuration) the server name is refering to its localhost. The second reason is, that by default mysql database only allows for local access. In order to resolve this issue I have to change the server name ip to the ip of my db instance (which is `172.23.26.112`) and allow remote access to the database. 
+![multipass_db_mysql_shell.png](./images/multipass_db_mysql_shell.png)
 
-The adminer we configured earlier in the cloud init file is also reachable under `.../adminer`.
+I can also check my global connection with `telnet`. Therefore I need the ip of my db instance which is in my case `172.22.224.254`
 
-. adminer
+```ps
+telnet 172.22.224.254 3306
+```
+
+![multipass_db_telnet.png](./images/multipass_db_telnet.png)
+
+In order to be able to connect to the database with the web servers php script I need to change the servername to my db ip address and of course rebuild the web instance:
+
+```php
+-             $servername = "127.0.0.1";
++             $servername = "172.22.224.254";
+```
+
+After launching this instance too I can now try to reach the `172.22.225.115/db.php` endpoint on my web server. 
+
+![multipass_web_db_php.png](./images/multipass_web_db_php.png)
+
+The index.php file and adminer we configured earlier in the cloud init file is also reachable under:
+
+`172.22.225.115/index.php`
+
+![multipass_web_apache_index_2.png](./images/multipass_web_apache_index_2.PNG)
+
+`172.22.225.115/adminer`
+
+![multipass_web_apache_adminer.png](./images/multipass_web_apache_adminer.PNG)
+
+If I use my configured login (server-ip: 172.22.224.254, username: admin, password: password) and select a database eg. mysql I will be redirected to the database:
+
+![multipass_web_apache_adminer_connected.png](./images/multipass_web_apache_adminer_connected.png)
+
+---
+<div style="display: flex; justify-content: space-between;">
+    <p>Author</p>
+    <p>David Abderhalden</p>
+</div>

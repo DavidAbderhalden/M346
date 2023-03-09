@@ -9,7 +9,6 @@ The data is inside the specific competence folder itself.<br>
 
 ```
 M346
-├──.gitignore
 ├──competences
 │    ├──KN01
 │    │    ├──images
@@ -25,10 +24,7 @@ M346
 │        └──task
 │            ├──cloud-init-web.yaml
 │            └──KN02.pdf
-├──README.md
-└──utils
-    ├──filetree.bat
-    └──out.txt
+└──README.md
 ```
 ## Author
 This Git repository belongs to [David Abderhalden](https://www.david-abderhalden.ch/).
