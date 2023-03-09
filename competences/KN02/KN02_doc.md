@@ -39,7 +39,7 @@ multipass launch 22.04 --name web --cloud-init <pfad>\cloud-init-web.yaml
 
 _for the \<path> I will specify the path to the cloud-init-web.yaml file on my computer._
 
-![multipass_launch_cloud-init.png](./images/multipass_launch_cloud-init.png)
+![multipass_launch_cloud-init.png](./images/multipass_launch_cloud-init.PNG)
 
 To test the web server I will switch on a shell of the instance (see [KN01](../KN01/KN01_doc.md)) and use following command:
 
@@ -49,11 +49,11 @@ sudo systemctl status apache2.service
 
 From the result I can tell that my setup worked and the web server is running:
 
-![multipass_web_running.png](./images/multipass_web_running.png)
+![multipass_web_running.png](./images/multipass_web_running.PNG)
 
 Just to make sure everything works fine I will access the web server with my hosts browser `172.23.24.155\index.html` where `172.23.24.155` is the ip address of my web instance.
 
-![multipass_web_apache_index.png](./images/multipass_web_apache_index.png)
+![multipass_web_apache_index.png](./images/multipass_web_apache_index.PNG)
 
 _I am promped with the default apache page which is a good sign._
 
@@ -135,11 +135,11 @@ Now I will launch my instance from the cloud init with the same command as in B)
 
 To test if the pages are reachable and working I first need to determin the instances ip address:
 
-![multipass_web_ip.png](./images/multipass_web_ip.png)
+![multipass_web_ip.png](./images/multipass_web_ip.PNG)
 
 Now I can access the `172.23.29.213/info.php`.
 
-![multipass_web_info.png](./images/multipass_web_info.png)
+![multipass_web_info.png](./images/multipass_web_info.PNG)
 
 ### b)
 
@@ -171,7 +171,7 @@ sudo sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mysql/mariadb.conf.d/50-server.cnf
 sudo systemctl restart mariadb.service
 ```
 
-![multipass_web_db_list_1.png](./images/multipass_web_db_list_1.png)
+![multipass_web_db_list_1.png](./images/multipass_web_db_list_1.PNG)
 
 To make sure that the database is working I will use the `shell` command and open a shell of my db instance. There I can call the database shell with following command:
 
@@ -179,7 +179,7 @@ To make sure that the database is working I will use the `shell` command and ope
 mysql -u admin -p
 ```
 
-![multipass_db_mysql_shell.png](./images/multipass_db_mysql_shell.png)
+![multipass_db_mysql_shell.png](./images/multipass_db_mysql_shell.PNG)
 
 I can also check my global connection with `telnet`. Therefore I need the ip of my db instance which is in my case `172.22.224.254`
 
@@ -187,7 +187,7 @@ I can also check my global connection with `telnet`. Therefore I need the ip of 
 telnet 172.22.224.254 3306
 ```
 
-![multipass_db_telnet.png](./images/multipass_db_telnet.png)
+![multipass_db_telnet.png](./images/multipass_db_telnet.PNG)
 
 In order to be able to connect to the database with the web servers php script I need to change the servername to my db ip address and of course rebuild the web instance:
 
@@ -198,7 +198,7 @@ In order to be able to connect to the database with the web servers php script I
 
 After launching this instance too I can now try to reach the `172.22.225.115/db.php` endpoint on my web server. 
 
-![multipass_web_db_php.png](./images/multipass_web_db_php.png)
+![multipass_web_db_php.png](./images/multipass_web_db_php.PNG)
 
 The index.php file and adminer we configured earlier in the cloud init file is also reachable under:
 
@@ -212,7 +212,7 @@ The index.php file and adminer we configured earlier in the cloud init file is a
 
 If I use my configured login (server-ip: 172.22.224.254, username: admin, password: password) and select a database eg. mysql I will be redirected to the database:
 
-![multipass_web_apache_adminer_connected.png](./images/multipass_web_apache_adminer_connected.png)
+![multipass_web_apache_adminer_connected.png](./images/multipass_web_apache_adminer_connected.PNG)
 
 ---
 <div style="display: flex; justify-content: space-between;">
