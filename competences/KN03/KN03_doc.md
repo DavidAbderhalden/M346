@@ -51,3 +51,66 @@ _The next screenshot provides a list of all the objects (files) I uploaded to my
 _To tell my bucket which files to use as static website I first had to enable the `Static web hosting` service. Next up I had to tell my bucket, which file to use as my website (in my case index.html). In the image below you can see the exact configuration of this `Static web hosting` service, for example its endpoint._
 
 ![aws_instance_bucket_static_website_hosting.png](./images/aws_instance_bucket_static_website_hosting.PNG)
+
+## B)
+
+For this exercise I again start the `Lab 4.1 - EC2` and create a new Instance. This time I also create a new Key Value pair with the name `David-Abderhalden-1`. My PC automatically downloads the private key and I save it in my users `.ssh` folder.
+
+It is also really important that the Security Rules for the SSH protocol allow connections from everywhere (0.0.0.0/0). This is already in the default settings so I won't touch them. 
+
+![aws_instance_ssh_security.png](./images/aws_instance_ssh_security.PNG)
+
+As soon as my instance is started and all the tests have passed I open a Terminal and try to connect to my AWS instance whith the following command:
+
+```
+ssh ubuntu@44.197.207.150 -i C:\Users\David\.ssh\David-Abderhalden-1.pem -o ServerAliveInterval=30
+```
+
+Note: for the ip address I have to use the public ip of my instance.
+
+If everything works well I should be prompted with a shell of my AWS instance:
+
+![aws_instance_ssh_shell.png](./images/aws_instance_ssh_shell.PNG)
+
+## C)
+
+Next up I will create a new EC2 instance but configure my SSH Key inside of the cloud-init file instead of the GUI.
+
+I still select my second ssh key over the GUI.
+
+Under Advanced settings I am able to load a cloud-init configuration,
+I input the following cloud-init with my public key of the first ssh key:
+
+```yaml
+#cloud-config
+users:
+  - name: ubuntu
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
+    home: /home/ubuntu
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC6lpo3pXfnBCXISVAapHYlDd5uybJlQrcGstabUbHAWMoSRMGMTSrMx4YP4wnUR2Zrv68n8Nm7ZonyV77CMQP7jVVlMwhw0bA9TEsCvEOmo9KQPwn6WoH2DequDsCTZtHrFFfZrs+V9CuUP28GQPaZyMprB4cP7a906BHLfx6C1spHWF4CcVuNM7lJGFaN+roX6XKu9uhrwY0LovifpZu83rmANNh76pXgWEBnfNzV5FM8k98z2u9enbAHtRwuc/r0qoHurAoMhiL8RlfeqhgCFXq5H+8xKIu/M/tvxBXYGwZw+7a6rnPkKFdVBDM5kf44d9fDsaj94stftFfi8Ls9 aws-key
+ssh_pwauth: false
+disable_root: false    
+```
+
+After I started the new EC2 instance and check that all tests have passed I connect to the instance with the first ssh key (public key in cloud-init).
+
+For that I use the following command:
+
+```
+ssh ubuntu@54.237.97.198 -i C:\Users\David\.ssh\David-Abderhalden-1.pem -o ServerAliveInterval=30
+```
+
+_The ip address is again the public ip of my EC2 instance._
+
+As you can see I am also able to configure my key in the cloud-init file. The image below shows the successful connection:
+
+![aws_instance_ssh_shell_2.png](./images/aws_instance_ssh_shell_2.PNG)
+
+---
+<div style="display: flex; justify-content: space-between;">
+    <p>Author</p>
+    <p>David Abderhalden</p>
+</div>
