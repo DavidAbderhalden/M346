@@ -195,6 +195,33 @@ Next I switch to the Volumes tab and click "Create Volume". I leave all the sett
 
 ![aws_instance_b-instance_volume.png](./images/aws_instance_b-instance_volume.PNG)
 
-As soon as the volume is created I need to attach it to my instance. I select the new volume and choose the "attach" option. Then in the GUI I select my instance and leave the mount path as is. I chould change the name of `sdf` to something else in the range `sd[f-p]` but this is not mandatory. The important part here is that I don't mount my new volume as root volume (`/dev/sda1`).
+As soon as the volume is created I need to attach it to my instance. I select the new volume and choose the "Attach volume" option. Then in the GUI I select my instance and leave the mount path as is. I chould change the name of `sdf` to something else in the range `sd[f-p]` but this is not mandatory. The important part here is that I don't mount my new volume as root volume (`/dev/sda1`).
 
 ![aws_instance_b-instance_volume_attach.png](./images/aws_instance_b-instance_volume_attach.PNG)
+
+Here is the overview of both of my mounted volumes:
+
+![aws_instance_b-instance_volumes.png](./images/aws_instance_b-instance_volumes.PNG)
+
+Now the next step is to terminate my `KN04-B-Instance` instance. When trying to terminate my instance I am prompted with the following notification dialog:
+
+![aws_instance_b-instance_terminate.png](./images/aws_instance_b-instance_terminate.PNG)
+
+This dialog points out to me, that all of the EBS volumes that have "Delete on Terminate" set to true will be deleted and the other will persist, which means costs can be created. 
+Then it displays to me, which volumes are not set to "Delete on Terminate" which in my case is only one. My newly created volume. I am going to confirm the termination.
+
+When I now display my Active volumes I can see that only my newly created volume is still existing:
+
+![aws_instance_b-instance_volumes_after.png](./images/aws_instance_b-instance_volumes_after.PNG)
+
+The volume state is also only "Available" and not "in-use". This is because when I terminated the instance which used the volume, the mount was also terminated. 
+
+But why was this volume not deleted too?
+
+This is because the volume was not mounted as a root volume and therefore did not get deleted. This can be especially usefull when managing for example logging files, which should persist after the instance was deleted. 
+
+---
+<div style="display: flex; justify-content: space-between;">
+    <p>Author</p>
+    <p>David Abderhalden</p>
+</div>
