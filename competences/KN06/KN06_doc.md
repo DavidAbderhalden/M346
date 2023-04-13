@@ -159,12 +159,52 @@ Now I can start both of my instances again. Below are screenshots of the resourc
 
 In the following exercise I will create a Load Balancer for horizontal scaling of my instances. 
 
-I navigate to the section `Load Balancers` and create a new `Application Load Balancer`.
+Following are the steps I had to take to create the Load Balancer
 
-- Start second instance of web server manually
+1. First off I create a new Network Interface for a second web server instance. As of now we have no Auto Scaling so I create it manutally and assign the private ip `172.31.10.21`. For the security group I reuse the one `KN05-webserver-security-group`.
+Important: The idea is that both instances run in the same subnet so it is important that I use the same subnet for the Network Interface. I don't let a public ip be auto-assigned because if we access the instances over the Load Balancer, the instance itself doesn't need a public ip address.
 
+2. Next up I can already start the second web server instance. I configure it just like the first one (except a bit less ressources) and assign my newly created Network Interface. 
 
-Neue Instance von Webserver, Neue Network interface von Webserver mit zweiter elastic ip
+3. Now lets get to the new part. I create a new Target Group (later used by the Load Balancer). There I add my two instances as Targets and for the Health Check I use the path: `/shop/alive`.
 
-Public ip von database entfernen
-SSH Inbound von DB entfernen
+_In the screenshot below you can see that both instances have passed the health check._
+![aws_target_group_registered.png](./images/aws_target_group_registered.PNG)
+
+4. Before creating the Load Balancer I need a Security Group for it. So I create a new one and add one inbound rule: TCP on Port 80 from 0.0.0.0/0.
+This is neccessary to be able to access the Load Balancer later over HTTP.
+
+5. I also need to create a new Subnet (`172.31.20.0/24`) because the Load Balancer needs a minimum of two subnets. This Subnet is currently not needed and therefore not used. 
+
+6. Now I create the Load Balancer with all the above created Groups and Subnets.
+
+_Below is an screenshot of the Load Balancer Sumary Tab._
+
+![aws_load_balancer_summary.png](./images/aws_load_balancer_summary.PNG)
+
+I test my Load Balancer by accessing the swagger endpoint over the Load Balancers DNS:
+
+```
+http://kn06-load-balancer-443946113.us-east-1.elb.amazonaws.com/swagger-ui/index.html
+```
+
+![aws_load_balancer_swagger.png](./images/aws_load_balancer_swagger.PNG)
+
+## D)
+
+1. I create a new Network Interface for a Launch Template we will later use in the Auto Scaling Group. The Interface uses the same subnet as the manual web server instances.
+
+2. Next is the Launch template. I configure it pretty much like a normal web server instance with `t2.medium` and `Ubuntu`. I also add the Network Interface I just created and the cloud-init configuration of the web server.
+
+3. Now for the Auto Scaling Group. I create a new Auto Scaling Group called `KN06-auto-scaling-group` and use the Launch Template for the instances. I also add the Load Balancer from C) to the group. 
+
+_In the screenshot below you can see a summary of my Auto Scaling Group._
+![aws_auto_scaling_group_summary.png](./images/aws_auto_scaling_group_summary.PNG)
+
+The last step is only to stop and deregister the old two manually added web server instances from the Target Group which the Load Balancer listenes to. 
+
+---
+<div style="display: flex; justify-content: space-between;">
+    <p>Author</p>
+    <p>David Abderhalden</p>
+</div>
