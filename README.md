@@ -41,15 +41,20 @@ M346
 │    │    ├──KN05_doc.md
 │    │    └──task
 │    │        └──KN05.pdf
-│    └──KN06
-│        ├──files
-│        │    ├──cloud-init-db.yaml
-│        │    ├──cloud-init-web-dotnet.yaml
-│        │    └──cloud-init-web-java.yaml
+│    ├──KN06
+│    │    ├──files
+│    │    │    ├──cloud-init-db.yaml
+│    │    │    ├──cloud-init-web-dotnet.yaml
+│    │    │    └──cloud-init-web-java.yaml
+│    │    ├──images
+│    │    ├──KN06_doc.md
+│    │    └──task
+│    │        └──KN06.pdf
+│    └──KN07
 │        ├──images
-│        ├──KN06_doc.md
+│        ├──KN07_doc.md
 │        └──task
-│            └──KN06.pdf
+│            └──KN07.pdf
 └──README.md
 ```
 ## Author

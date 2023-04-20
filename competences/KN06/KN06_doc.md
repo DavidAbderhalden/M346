@@ -192,11 +192,9 @@ http://kn06-load-balancer-443946113.us-east-1.elb.amazonaws.com/swagger-ui/index
 
 ## D)
 
-1. I create a new Network Interface for a Launch Template we will later use in the Auto Scaling Group. The Interface uses the same subnet as the manual web server instances.
+1. Next is the Launch template. I configure it pretty much like a normal web server instance with `t2.medium` and `Ubuntu`. I also add the subnet from KN05 and the cloud-init configuration of the web server.
 
-2. Next is the Launch template. I configure it pretty much like a normal web server instance with `t2.medium` and `Ubuntu`. I also add the Network Interface I just created and the cloud-init configuration of the web server.
-
-3. Now for the Auto Scaling Group. I create a new Auto Scaling Group called `KN06-auto-scaling-group` and use the Launch Template for the instances. I also add the Load Balancer from C) to the group. 
+2. Now for the Auto Scaling Group. I create a new Auto Scaling Group called `KN06-auto-scaling-group` and use the Launch Template for the instances. I also add the Load Balancer from C) to the group. 
 
 _In the screenshot below you can see a summary of my Auto Scaling Group._
 ![aws_auto_scaling_group_summary.png](./images/aws_auto_scaling_group_summary.PNG)
