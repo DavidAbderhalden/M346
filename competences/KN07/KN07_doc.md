@@ -102,3 +102,18 @@ In this case we have two options for a CRM System: `Zoho CRM` and `SalesForce Sa
 
 ### **Zoho CRM**
 
+Zoho Enterprise edition costs 40$ per year and 50$ per month. It would be the best option for our company because Enterprise has all the features an enterprise needs ...
+
+![zoho_repurchasing_cost.png](./images/zoho_repurchasing_cost.PNG)
+
+### **SalesForce Sales Cloud**
+
+SalesForce is more costly and also provides less options than Zoho. Therefore I would definitly prefer the use of Zoho.
+
+![salesforce_repurchasing_cost.png](./images/salesforce_repurchasing_cost.PNG)
+
+## Comparison Cloud Services
+
+If you want to save as much money as possible and have low expense, repurchasing (Zoho CRM) is definetly the best option. 
+
+On the other hand when using your own application you can implement features as you like etc. Here I would make use of Heroku due to its relatively low pricing. Replatforming comes with more work expense than Rehosting so if you are really lazy and can afford it, go for the Rehosting option with AWS.
